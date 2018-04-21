@@ -20,4 +20,9 @@
 
 
 ## 进展
-+ 2018.04.09 开始项目 
++ 2018.04.09 开始项目
+    - 
+    - flask项目 
+        - virtualenv venv
+        -  source venv/bin/activate
+        -  pip install flask
