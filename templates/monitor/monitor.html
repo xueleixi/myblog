@@ -6,9 +6,11 @@
     <script src="/static/camera.js"></script>
 </head>
 <body>
+<button id="btn">开始</button>
+时间间隔:<input type="text" value="1000" id="interval">
+<br>
 <video id="myCamera" autoplay></video>
 <img src="" alt="" id="img">
-<button id="btn">拍摄</button>
 <script>
     var myCamera = new Camera('myCamera');
     myCamera.init(function () {
@@ -17,23 +19,28 @@
         console.log('error');
     });
     var btn = document.getElementById('btn');
+    var interval = document.getElementById('interval');
+    var started = false;
+    var t1, t2;
 
     function onBtnClick() {
+        if (!started) {
+            t1 = setInterval(function () {
+                //定时清理内存
+                location.reload(true);
+            }, 300e3);
+            console.log("value=" + interval.value)
+            t2 = setInterval(onBtnClick, interval.value);
+            started = true;
+        }
         myCamera.shoot({}, function (imageSrc) {
             document.getElementById('img').src = imageSrc;
-            console.log(myCamera.imageSrcList)
+            console.log(myCamera.imageSrcList);
             upload(myCamera.imageSrcList[myCamera.imageSrcList.length - 1])
         });
     }
 
     btn.addEventListener('click', onBtnClick, false);
-
-    setInterval(function () {
-        //定时清理内存
-        window.location.href = '/';
-    }, 60e3);
-    setInterval(onBtnClick, 1000);
-
 
     function upload(basestr, type, $li) {
         var text = window.atob(basestr.split(",")[1]);
