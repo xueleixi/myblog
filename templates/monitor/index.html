@@ -2,110 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>camera.js</title>
-    <script src="/static/camera.js"></script>
+    <title>hello 一休！</title>
 </head>
 <body>
-<video id="myCamera" autoplay></video>
-<img src="" alt="" id="img">
-<button id="btn">拍摄</button>
-<script>
-    var myCamera = new Camera('myCamera');
-    myCamera.init(function () {
-        console.log('success');
-    }, function (err) {
-        console.log('error');
-    });
-    var btn = document.getElementById('btn');
+时间间隔(ms):<input type="text" value="1000" id="interval"><button id="changeInterval" value="修改"><br>
+<br>
+<img src="/static/1.jpg" width="800" alt="😆" id="img"><br>
+    <script>
+        var img = document.getElementById('img');
+        var interval = document.getElementById('interval');
+        var changeInterval = document.getElementById('changeInterval');
 
-    function onBtnClick() {
-        myCamera.shoot({}, function (imageSrc) {
-            document.getElementById('img').src = imageSrc;
-            console.log(myCamera.imageSrcList)
-            upload(myCamera.imageSrcList[myCamera.imageSrcList.length - 1])
-        });
-    }
-
-    btn.addEventListener('click', onBtnClick, false);
-
-    setInterval(function () {
-        //定时清理内存
-        window.location.href = '/';
-    }, 60e3);
-    setInterval(onBtnClick, 1000);
-
-
-    function upload(basestr, type, $li) {
-        var text = window.atob(basestr.split(",")[1]);
-        var buffer = new ArrayBuffer(text.length);
-        var ubuffer = new Uint8Array(buffer);
-        var pecent = 0, loop = null;
-
-        for (var i = 0; i < text.length; i++) {
-            ubuffer[i] = text.charCodeAt(i);
+        function updateImage() {
+            return setInterval(function () {
+                img.src = "/static/1.jpg?" + new Date().getTime();
+            }, interval.value);
         }
 
-        var Builder = window.WebKitBlobBuilder || window.MozBlobBuilder;
-        var blob;
-
-        if (Builder) {
-            var builder = new Builder();
-            builder.append(buffer);
-            blob = builder.getBlob(type);
-        } else {
-            blob = new window.Blob([buffer], {type: type});
+        var t = updateImage();
+        changeInterval.onclick = function () {
+            clearInterval(t);
+            t = updateImage();
         }
 
-        var xhr = new XMLHttpRequest();
-        var formdata = new FormData();
-        formdata.append("imagefile", blob);
+    </script>
 
-        xhr.open("post", "/upload");
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log("上传成功：" + xhr.responseText);
-
-                clearInterval(loop);
-
-                //当收到该消息时上传完毕
-                // $li.find(".progress span").animate({"width": "100%"}, pecent < 95 ? 200 : 0, function () {
-                //     $(this).html("上传成功");
-                // });
-                //
-                // $(".pic-list").append("<a href=" + xhr.responseText + ">" + xhr.responseText + "<img src=" + xhr.responseText +  "/></a>")
-            }
-        };
-
-        //数据发送进度，前50%展示该进度
-        // xhr.upload.addEventListener("progress", function (e) {
-        //     if (loop) return;
-        //
-        //     pecent = ~~(100 * e.loaded / e.total) / 2;
-        //     $li.find(".progress span").css("width", pecent + "%");
-        //
-        //     if (pecent == 50) {
-        //         mockProgress();
-        //     }
-        // }, false);
-
-        //数据后50%用模拟进度
-        // function mockProgress() {
-        //     if (loop) return;
-        //
-        //     loop = setInterval(function () {
-        //         pecent++;
-        //         $li.find(".progress span").css("width", pecent + "%");
-        //
-        //         if (pecent == 99) {
-        //             clearInterval(loop);
-        //         }
-        //     }, 100)
-        // }
-
-        xhr.send(formdata);
-    }
-
-</script>
 </body>
 </html>

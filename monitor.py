@@ -10,6 +10,11 @@ def index():
     return render_template('/monitor/index.html')
 
 
+@app.route('/monitor')
+def monitor():
+    return render_template('/monitor/monitor.html')
+
+
 @app.route('/upload', methods=['POST'])
 def get():
     files = request.files
@@ -25,4 +30,4 @@ def get():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8080, host='0.0.0.0')
