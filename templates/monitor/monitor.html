@@ -14,9 +14,10 @@
 <script>
     var myCamera = new Camera('myCamera');
     myCamera.init(function () {
-        console.log('success');
+        console.log('camera init success');
     }, function (err) {
-        console.log('error');
+        console.error('camera init error');
+        console.error(err);
     });
     var btn = document.getElementById('btn');
     var interval = document.getElementById('interval');

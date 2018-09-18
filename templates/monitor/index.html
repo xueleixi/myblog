@@ -5,27 +5,28 @@
     <title>hello 一休！</title>
 </head>
 <body>
-时间间隔(ms):<input type="text" value="1000" id="interval"><button id="changeInterval" value="修改"><br>
+时间间隔(ms):<input type="text" value="1000" id="interval">
+<button id="changeInterval" value="修改"/>
 <br>
 <img src="/static/1.jpg" width="800" alt="😆" id="img"><br>
-    <script>
-        var img = document.getElementById('img');
-        var interval = document.getElementById('interval');
-        var changeInterval = document.getElementById('changeInterval');
+<script>
+    var img = document.getElementById('img');
+    var interval = document.getElementById('interval');
+    var changeInterval = document.getElementById('changeInterval');
 
-        function updateImage() {
-            return setInterval(function () {
-                img.src = "/static/1.jpg?" + new Date().getTime();
-            }, interval.value);
-        }
+    function updateImage() {
+        return setInterval(function () {
+            img.src = "/static/1.jpg?" + new Date().getTime();
+        }, interval.value);
+    }
 
-        var t = updateImage();
-        changeInterval.onclick = function () {
-            clearInterval(t);
-            t = updateImage();
-        }
+    var t = updateImage();
+    changeInterval.onclick = function () {
+        clearInterval(t);
+        t = updateImage();
+    }
 
-    </script>
+</script>
 
 </body>
 </html>
